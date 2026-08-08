@@ -25,7 +25,6 @@ input {
     --etal-action-bar-left: var(--mantine-spacing-sm);
     --etal-action-bar-width: 72px;
     --etal-action-bar-gap: var(--mantine-spacing-sm);
-    --etal-footer-clearance: 80px;
     position: relative;
     height: 100dvh;
     overflow: hidden;
@@ -33,15 +32,22 @@ input {
 
 .actionBar {
     position: fixed;
-    top: var(--etal-workspace-top);
+    top: 50%;
     left: var(--etal-action-bar-left);
     z-index: 5;
     box-sizing: border-box;
     width: var(--etal-action-bar-width);
-    max-height: calc(100dvh - var(--etal-workspace-top) - var(--etal-footer-clearance));
+    height: clamp(360px, 65dvh, 600px);
+    max-height: calc(100dvh - var(--etal-workspace-top) - var(--etal-workspace-top));
     overflow-y: auto;
     background: color-mix(in srgb, var(--etal-color-surface) 88%, transparent);
+    transform: translateY(-50%);
     backdrop-filter: blur(12px);
+}
+
+.actionBarActions {
+    height: 100%;
+    justify-content: space-evenly;
 }
 
 .actionBarButton {

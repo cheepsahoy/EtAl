@@ -8,7 +8,7 @@ function ActionBar() {
 
     return (
         <Paper component="nav" className="actionBar" aria-label="Workspace actions" p={4} radius="md" shadow="md" withBorder>
-            <Stack gap={2}>
+            <Stack className="actionBarActions" gap={2}>
                 <ActionButton
                     active={isSelectedArticleOpen}
                     icon={FileText}
