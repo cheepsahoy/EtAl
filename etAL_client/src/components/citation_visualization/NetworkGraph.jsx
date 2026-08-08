@@ -1,6 +1,7 @@
 import * as d3 from 'd3'
 import {useCallback, useMemo, useRef, useEffect, useState} from 'react'
 import useNetworkGraphContext from '../../hooks/useNetworkGraphContext'
+import useWorkspaceContext from '../../hooks/useWorkspaceContext'
 import {ActionIcon, Group, SegmentedControl, Tooltip, useMantineTheme} from '@mantine/core'
 import {Maximize2, Minus, Plus} from 'lucide-react'
 import {getEtalSemanticColors} from '../../theme'
@@ -124,7 +125,9 @@ function optimalSizeCalculator(nodes, buffer) {
     }
 }
 
-function NetworkGraph({isCitationMenuOpen, citationMenuWidth}) {
+function NetworkGraph() {
+    const {isCitationMenuOpen, citationMenuWidth} = useWorkspaceContext()
+    const {data, selectedArticle, setArticle, graphMode, setGraphMode} = useNetworkGraphContext()
     const svgRef = useRef()
     const zoomBehaviorRef = useRef()
     const cameraLayerRef = useRef()
@@ -137,7 +140,6 @@ function NetworkGraph({isCitationMenuOpen, citationMenuWidth}) {
 
     drawerStateRef.current = {isOpen: isCitationMenuOpen, width: citationMenuWidth}
 
-    const {data, selectedArticle, setArticle, graphMode, setGraphMode} = useNetworkGraphContext()
     console.log('before render', selectedArticle)
 
     const hideNodePreview = useCallback(() => {
@@ -189,18 +191,20 @@ function NetworkGraph({isCitationMenuOpen, citationMenuWidth}) {
         const viewportWidth = Math.max(viewport.width, 1)
         const viewportHeight = Math.max(viewport.height, 1)
         const navBottom = document.querySelector('.navBar')?.getBoundingClientRect().bottom ?? 0
+        const actionBarRight = document.querySelector('.actionBar')?.getBoundingClientRect().right ?? 0
         const drawer = drawerStateRef.current
         const drawerWidth = drawer.isOpen ? drawer.width : 0
         const margin = 24
         const controlsClearance = 64
-        const availableWidth = Math.max(viewportWidth - drawerWidth - margin * 2, 1)
+        const leftClearance = Math.max(actionBarRight + margin, margin)
+        const availableWidth = Math.max(viewportWidth - drawerWidth - leftClearance - margin, 1)
         const availableHeight = Math.max(viewportHeight - navBottom - margin - controlsClearance, 1)
         const bounds = graphBoundsRef.current
         const scale = Math.min(
             8,
             Math.max(0.1, Math.min(availableWidth / bounds.width, availableHeight / bounds.height)),
         )
-        const visibleCenterX = margin + availableWidth / 2
+        const visibleCenterX = leftClearance + availableWidth / 2
         const visibleCenterY = navBottom + availableHeight / 2
         const cameraOffsetX = -drawerWidth / 2
         const translateX = visibleCenterX - bounds.centerX * scale - cameraOffsetX
@@ -363,11 +367,13 @@ function NetworkGraph({isCitationMenuOpen, citationMenuWidth}) {
     useEffect(() => {
         const svgElement = svgRef.current
         const navElement = document.querySelector('.navBar')
+        const actionBarElement = document.querySelector('.actionBar')
         if (!svgElement) return undefined
 
         const observer = new ResizeObserver(() => fitGraph(false))
         observer.observe(svgElement)
         if (navElement) observer.observe(navElement)
+        if (actionBarElement) observer.observe(actionBarElement)
 
         return () => observer.disconnect()
     }, [data, fitGraph])

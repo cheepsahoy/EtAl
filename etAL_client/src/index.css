@@ -21,9 +21,50 @@ input {
 }
 
 .appShell {
+    --etal-workspace-top: calc((var(--mantine-spacing-lg) * 2) + 42px + var(--mantine-spacing-md));
+    --etal-action-bar-left: var(--mantine-spacing-sm);
+    --etal-action-bar-width: 72px;
+    --etal-action-bar-gap: var(--mantine-spacing-sm);
+    --etal-footer-clearance: 80px;
     position: relative;
     height: 100dvh;
     overflow: hidden;
+}
+
+.actionBar {
+    position: fixed;
+    top: var(--etal-workspace-top);
+    left: var(--etal-action-bar-left);
+    z-index: 5;
+    box-sizing: border-box;
+    width: var(--etal-action-bar-width);
+    max-height: calc(100dvh - var(--etal-workspace-top) - var(--etal-footer-clearance));
+    overflow-y: auto;
+    background: color-mix(in srgb, var(--etal-color-surface) 88%, transparent);
+    backdrop-filter: blur(12px);
+}
+
+.actionBarButton {
+    width: 100%;
+    padding: var(--mantine-spacing-sm) 0.2rem;
+    border-radius: var(--mantine-radius-sm);
+    color: var(--etal-color-text-muted);
+    transition: color 140ms ease, background-color 140ms ease;
+}
+
+.actionBarButton .mantine-Button-label {
+    white-space: normal;
+}
+
+.actionBarButton:hover,
+.actionBarButton[data-active] {
+    color: var(--etal-color-text);
+    background: color-mix(in srgb, var(--etal-color-surface-strong) 85%, transparent);
+}
+
+.actionBarButton:focus-visible {
+    outline: 2px solid var(--mantine-color-milkyPurple-4);
+    outline-offset: -2px;
 }
 
 .navBar {
@@ -33,6 +74,18 @@ input {
     left: 0;
     z-index: 5;
     pointer-events: none;
+}
+
+.navLogo {
+    position: absolute;
+    top: 50%;
+    left: var(--mantine-spacing-lg);
+    color: var(--etal-color-text);
+    font-family: 'Newsreader', serif;
+    font-size: 1.75rem;
+    font-weight: 600;
+    line-height: 1;
+    transform: translateY(-50%);
 }
 
 .searchArea {
@@ -51,7 +104,13 @@ input {
 }
 
 .selectedArticleViewBox {
-    width: min(300px, calc(100vw - (var(--mantine-spacing-lg) * 2)));
+    width: min(
+        300px,
+        calc(
+            100vw - var(--etal-action-bar-left) - var(--etal-action-bar-width) - var(--etal-action-bar-gap) -
+                var(--mantine-spacing-md)
+        )
+    );
 }
 
 .selectedArticleViewBox > .mantine-Paper-root {
@@ -132,6 +191,11 @@ input {
     backdrop-filter: blur(16px);
 }
 
+.citationDrawerTitle {
+    flex: 1;
+    min-width: 0;
+}
+
 .citationDrawer {
     border-left: 1px solid color-mix(in srgb, var(--etal-color-border) 35%, transparent);
 }
@@ -206,6 +270,12 @@ input {
     fill-opacity: 1;
     fill: var(--etal-graph-node-oracle) !important;
     stroke: var(--etal-graph-node-oracle-stroke);
+}
+
+@media (max-width: 860px) {
+    .navLogo {
+        display: none;
+    }
 }
 
 @media (prefers-reduced-motion: reduce) {

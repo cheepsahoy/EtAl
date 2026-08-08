@@ -1,119 +1,15 @@
-import { useContext } from "react";
-import { NetworkGraphContext } from "../contexts/NetworkGraphContext";
-import etalCitationMapper from "../../../OA_middleWare/etAL/citationMapper";
-import {
-  estimateEtAlFetchTimeMS,
-  GRAPH_COMPLETION_ANIMATION_MS,
-  GRAPH_READY_HOLD_MS,
-} from "../frontEndUtils/networkLoading";
+import {createContext, useContext} from 'react'
 
-//Calling OpenAlex internal etAl functions
-/**
- * @param {OA_WorkObject} citationObj
- * @returns {etAL_frontEndPayload}
- */
-async function callEtAl(citationObj) {
-  const citationConversation = new etalCitationMapper();
-  citationConversation.initialize(citationObj);
-  console.log(
-    "Handling click in citation card, setting searchResult id to",
-    citationObj.title
-  );
-
-  const start = performance.now();
-  console.log(
-    `beginning populate conversation call for ${
-      citationConversation.citation_conversation[
-        citationConversation.centralCitationID
-      ].title
-    }`
-  );
-  await citationConversation.populateConversation();
-  const end = performance.now();
-  const duration = end - start;
-  console.log(
-    `finished populating conversation, performance time was ${duration} ms`
-  );
-
-  const finalPayload = {
-    centralCitationID: citationConversation.centralCitationID,
-    citation_conversation: citationConversation.citation_conversation,
-    citations_outgoing: citationConversation.citations_outgoing,
-    sorted_citation_conversation:
-      citationConversation.sorted_citation_conversation,
-    sorted_citations_outgoing: citationConversation.sorted_citations_outgoing,
-  };
-  return finalPayload;
-}
+export const NetworkGraphContext = createContext(null)
 
 function useNetworkGraphContext() {
-  const {
-    setState,
-    loading,
-    loadingPhase,
-    data,
-    timeToLoadMS,
-    selectedArticle,
-    graphMode,
-  } = useContext(NetworkGraphContext);
+  const context = useContext(NetworkGraphContext)
 
-  async function loadData(citationObj) {
-    console.log("LOADING", citationObj);
-    setState({
-      loading: true,
-      loadingPhase: "fetching",
-      timeToLoadMS: estimateEtAlFetchTimeMS(citationObj.cited_by_count),
-      selectedArticle: null,
-      graphMode: "citations",
-    });
-
-    try {
-      const resp = await callEtAl(citationObj);
-      setState({ data: resp, loadingPhase: "completing" });
-
-      await new Promise((resolve) =>
-        setTimeout(
-          resolve,
-          GRAPH_COMPLETION_ANIMATION_MS + GRAPH_READY_HOLD_MS
-        )
-      );
-
-      console.log("SETTING LOADING FALSE");
-      setState({ loading: false, loadingPhase: null });
-    } catch (error) {
-      setState({ loading: false, loadingPhase: null });
-      throw error;
-    }
+  if (context === null) {
+    throw new Error('useNetworkGraphContext must be used within NetworkGraphProvider')
   }
 
-  function setArticle(articleId) {
-    setState({
-      selectedArticle: {
-        id: articleId,
-      },
-    });
-  }
-
-  function setGraphMode(mode) {
-    if (mode === "citations" || mode === "oracle") {
-      setState({ graphMode: mode });
-    }
-  }
-
-  return {
-    // state data:
-    loading,
-    loadingPhase,
-    data,
-    timeToLoadMS,
-    selectedArticle,
-    graphMode,
-
-    // actions
-    loadData,
-    setArticle,
-    setGraphMode,
-  };
+  return context
 }
 
-export default useNetworkGraphContext;
+export default useNetworkGraphContext
