@@ -1,5 +1,5 @@
 import { Box, Card, Container, SimpleGrid, Stack, Text, Title } from "@mantine/core";
-import SearchBar from "../searchFunctions/SearchBar";
+import SearchBar from "../search_functions/SearchBar";
 
 const featureCards = ["feature-one", "feature-two", "feature-three"];
 

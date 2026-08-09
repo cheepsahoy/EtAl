@@ -1,5 +1,5 @@
 import CitationCard from "./CitationCard";
-import etALSearch from "../../../../OA_middleWare/etAL/etALSearch";
+import etALSearch from "../../../../oa_middleware/etal/etalSearch";
 import { Button, Group, Paper, Stack, Text } from "@mantine/core";
 import { useEffect, useRef, useState } from "react";
 

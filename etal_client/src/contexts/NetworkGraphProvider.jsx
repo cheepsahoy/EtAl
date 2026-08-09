@@ -4,7 +4,7 @@ import {
   estimateEtAlFetchTimeMS,
   GRAPH_COMPLETION_ANIMATION_MS,
   GRAPH_READY_HOLD_MS,
-} from '../frontEndUtils/networkLoading'
+} from '../front_end_utils/networkLoading'
 import {fetchNetworkGraphData} from '../services/networkGraphService'
 
 //-------------Shared Graph State-----------------

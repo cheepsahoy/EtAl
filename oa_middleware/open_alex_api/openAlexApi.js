@@ -1,11 +1,9 @@
 import {normalizeOpenAlexText} from './openAlexTextUtils.js'
 
 class OA_API {
-    #api_email
     #api_token
 
-    constructor(your_email, your_token = '') {
-        this.#api_email = your_email
+    constructor(your_token = null) {
         this.#api_token = your_token
     }
 
@@ -153,9 +151,12 @@ class OA_API {
             method: methodUpper,
         }
 
-        if (this.#api_token) {
+        /**
+         * the API code has changed w/ Open Alex. you actually append it to the end of the request, I'll make the change later.
+         */
+        /*   if (this.#api_token) {
             payload.headers.api_key = this.#api_token
-        }
+        } */
 
         if (params !== '' && methodUpper == 'POST') {
             payload.body = JSON.stringify(params)

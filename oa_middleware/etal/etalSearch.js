@@ -1,4 +1,4 @@
-import OA_API from '../openAlexAPI/OpenAlexAPI'
+import OA_API from '../open_alex_api/openAlexApi'
 
 const OpenAlexAPI = new OA_API('')
 

@@ -1,7 +1,5 @@
 .env
 node_modules
 test.js
-testdata
+test_data
 .DS_Store
-agent_instructions
-AGENTS.md

@@ -1,4 +1,4 @@
-import etALSearch from "../../../../OA_middleWare/etAL/etALSearch";
+import etALSearch from "../../../../oa_middleware/etal/etalSearch";
 import useNetworkGraphContext from "../../hooks/useNetworkGraphContext";
 import { Button, Group, Paper, Stack, Text, Title } from "@mantine/core";
 import { useState } from "react";

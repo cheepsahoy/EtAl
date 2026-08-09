@@ -1,4 +1,4 @@
-import Navbar from "./components/searchFunctions/Navbar";
+import Navbar from "./components/search_functions/Navbar";
 import ActionBar from "./components/action_bar/ActionBar";
 import FooterBar from "./components/footer/FooterBar";
 import NetworkGraph from "./components/citation_visualization/NetworkGraph";

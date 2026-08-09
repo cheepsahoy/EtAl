@@ -1,4 +1,4 @@
-import etalCitationMapper from '../../../OA_middleWare/etAL/citationMapper'
+import etalCitationMapper from '../../../oa_middleware/etal/citationMapper'
 
 /**
  * @param {OA_WorkObject} citationObj

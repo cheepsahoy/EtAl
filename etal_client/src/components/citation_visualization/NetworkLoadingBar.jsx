@@ -1,6 +1,6 @@
 import {Progress, Stack, Text} from '@mantine/core'
 import {useEffect, useRef, useState} from 'react'
-import {GRAPH_COMPLETION_ANIMATION_MS} from '../../frontEndUtils/networkLoading'
+import {GRAPH_COMPLETION_ANIMATION_MS} from '../../front_end_utils/networkLoading'
 
 const FETCH_TARGET = 90
 
