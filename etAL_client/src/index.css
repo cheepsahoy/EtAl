@@ -322,6 +322,12 @@ input {
     stroke-opacity: 1;
 }
 
+.oracleSelectedLink {
+    stroke: var(--etal-graph-link-oracle);
+    stroke-width: 3px;
+    stroke-opacity: 1;
+}
+
 .oracleNode {
     stroke-width: 5px;
     stroke-opacity: 1;

@@ -13,6 +13,7 @@ export function updateGraphOverlayPositions(highlightLayers, sizeScale) {
     positionLinksAtNodeEdges(highlightLayers.hoverLinks.selectAll('line'), sizeScale)
     positionLinksAtNodeEdges(highlightLayers.sharedLinks.selectAll('line'), sizeScale)
     positionLinksAtNodeEdges(highlightLayers.selectedLinks.selectAll('line'), sizeScale)
+    positionLinksAtNodeEdges(highlightLayers.oracleLinks.selectAll('line'), sizeScale)
     positionNodes(highlightLayers.hoverNeighbors.selectAll('circle'))
     positionNodes(highlightLayers.sharedNodes.selectAll('circle'))
     positionNodes(highlightLayers.selectedNodes.selectAll('circle'))
@@ -57,6 +58,7 @@ export function createNetworkGraphScene({
         hoverLinks: makeHighlightLayer(zoomLayer),
         sharedLinks: makeHighlightLayer(zoomLayer),
         selectedLinks: makeHighlightLayer(zoomLayer),
+        oracleLinks: makeHighlightLayer(zoomLayer),
     }
 
     const baseNodes = zoomLayer

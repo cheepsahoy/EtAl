@@ -81,11 +81,25 @@ export default function useNetworkGraphSelection({
             visualRadiusOffsets.set(hovered.targetNode.id, HOVERED_NODE_LINK_OFFSET)
         }
         const getVisualRadiusOffset = node => visualRadiusOffsets.get(node.id) ?? 0
+        const isOracleMode = graphMode === 'oracle'
+        const citationSelectedLinks = isOracleMode ? [] : selected.links
+        const oracleSelectedLinks = isOracleMode ? selected.links : []
 
         scene.setBaseLinkRadiusOffset(getVisualRadiusOffset)
         joinLinks(layers.hoverLinks, hoverOnlyLinks, 'hoverPreviewLink', getVisualRadiusOffset)
         joinLinks(layers.sharedLinks, sharedLinks, 'sharedLinkUnderlay', getVisualRadiusOffset)
-        joinLinks(layers.selectedLinks, selected.links, 'selectedLink', getVisualRadiusOffset)
+        joinLinks(
+            layers.selectedLinks,
+            citationSelectedLinks,
+            'selectedLink',
+            getVisualRadiusOffset,
+        )
+        joinLinks(
+            layers.oracleLinks,
+            oracleSelectedLinks,
+            'oracleSelectedLink',
+            getVisualRadiusOffset,
+        ).style('stroke', graphColors.oracleLink)
         joinNodes(
             layers.hoverNeighbors,
             hoverOnlyNeighbors,
