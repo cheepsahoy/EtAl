@@ -1,12 +1,5 @@
 import * as d3 from 'd3'
-
-function positionLinks(selection) {
-    selection
-        .attr('x1', link => link.source.x)
-        .attr('y1', link => link.source.y)
-        .attr('x2', link => link.target.x)
-        .attr('y2', link => link.target.y)
-}
+import {positionLinksAtNodeEdges} from './networkGraphLinkPosition'
 
 function positionNodes(selection) {
     selection.attr('cx', node => node.x).attr('cy', node => node.y)
@@ -16,10 +9,10 @@ function makeHighlightLayer(zoomLayer) {
     return zoomLayer.append('g').attr('class', 'graphHighlightLayer').attr('aria-hidden', 'true')
 }
 
-export function updateGraphOverlayPositions(highlightLayers) {
-    positionLinks(highlightLayers.hoverLinks.selectAll('line'))
-    positionLinks(highlightLayers.sharedLinks.selectAll('line'))
-    positionLinks(highlightLayers.selectedLinks.selectAll('line'))
+export function updateGraphOverlayPositions(highlightLayers, sizeScale) {
+    positionLinksAtNodeEdges(highlightLayers.hoverLinks.selectAll('line'), sizeScale)
+    positionLinksAtNodeEdges(highlightLayers.sharedLinks.selectAll('line'), sizeScale)
+    positionLinksAtNodeEdges(highlightLayers.selectedLinks.selectAll('line'), sizeScale)
     positionNodes(highlightLayers.hoverNeighbors.selectAll('circle'))
     positionNodes(highlightLayers.sharedNodes.selectAll('circle'))
     positionNodes(highlightLayers.selectedNodes.selectAll('circle'))
@@ -83,6 +76,7 @@ export function createNetworkGraphScene({
     highlightLayers.selectedNodes = makeHighlightLayer(zoomLayer)
     highlightLayers.hoveredNode = makeHighlightLayer(zoomLayer)
 
+    let getBaseLinkRadiusOffset = () => 0
     const centerStrength = graph.nodes.length > 2 ? 1 : 0
     const simulation = d3
         .forceSimulation(graph.nodes)
@@ -99,14 +93,18 @@ export function createNetworkGraphScene({
         )
         .on('tick', () => {
             positionNodes(baseNodes)
-            positionLinks(baseLinks)
-            updateGraphOverlayPositions(highlightLayers)
+            positionLinksAtNodeEdges(baseLinks, graph.sizeScale, getBaseLinkRadiusOffset)
+            updateGraphOverlayPositions(highlightLayers, graph.sizeScale)
         })
 
     return {
         cameraLayer,
         zoomBehavior,
         highlightLayers,
+        setBaseLinkRadiusOffset(getRadiusOffset) {
+            getBaseLinkRadiusOffset = getRadiusOffset
+            positionLinksAtNodeEdges(baseLinks, graph.sizeScale, getBaseLinkRadiusOffset)
+        },
         destroy() {
             simulation.stop()
             svg.on('.zoom', null)

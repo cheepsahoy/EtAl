@@ -3,10 +3,23 @@ import {useEffect} from 'react'
 import {getNetworkRelationships} from './networkGraphData'
 import {updateGraphOverlayPositions} from './networkGraphScene'
 
-function joinLinks(layer, links, className) {
+const HOVER_NEIGHBOR_RADIUS_OFFSET = 4
+const HOVERED_NODE_RADIUS_OFFSET = 5
+const SHARED_NODE_RADIUS_OFFSET = 7
+const HOVER_NEIGHBOR_LINK_OFFSET = HOVER_NEIGHBOR_RADIUS_OFFSET + 3 / 2
+const HOVERED_NODE_LINK_OFFSET = HOVERED_NODE_RADIUS_OFFSET + 5 / 2
+const SHARED_NODE_LINK_OFFSET = SHARED_NODE_RADIUS_OFFSET + 6 / 2
+
+function joinLinks(layer, links, className, getRadiusOffset) {
+    const positionedLinks = links.map(link => ({
+        ...link,
+        sourceRadiusOffset: getRadiusOffset(link.source),
+        targetRadiusOffset: getRadiusOffset(link.target),
+    }))
+
     return layer
         .selectAll('line')
-        .data(links, link => link.key)
+        .data(positionedLinks, link => link.key)
         .join('line')
         .attr('class', `graphOverlay isVisible ${className}`)
 }
@@ -60,12 +73,33 @@ export default function useNetworkGraphSelection({
             node => node.id !== hoveredNodeId && selectedNodeIds.has(node.id),
         )
         const layers = scene.highlightLayers
+        const visualRadiusOffsets = new Map([
+            ...hoverOnlyNeighbors.map(node => [node.id, HOVER_NEIGHBOR_LINK_OFFSET]),
+            ...sharedNodes.map(node => [node.id, SHARED_NODE_LINK_OFFSET]),
+        ])
+        if (hovered.targetNode) {
+            visualRadiusOffsets.set(hovered.targetNode.id, HOVERED_NODE_LINK_OFFSET)
+        }
+        const getVisualRadiusOffset = node => visualRadiusOffsets.get(node.id) ?? 0
 
-        joinLinks(layers.hoverLinks, hoverOnlyLinks, 'hoverPreviewLink')
-        joinLinks(layers.sharedLinks, sharedLinks, 'sharedLinkUnderlay')
-        joinLinks(layers.selectedLinks, selected.links, 'selectedLink')
-        joinNodes(layers.hoverNeighbors, hoverOnlyNeighbors, 'hoverPreviewNeighbor', graph, 4)
-        joinNodes(layers.sharedNodes, sharedNodes, 'sharedNodeHalo', graph, 7)
+        scene.setBaseLinkRadiusOffset(getVisualRadiusOffset)
+        joinLinks(layers.hoverLinks, hoverOnlyLinks, 'hoverPreviewLink', getVisualRadiusOffset)
+        joinLinks(layers.sharedLinks, sharedLinks, 'sharedLinkUnderlay', getVisualRadiusOffset)
+        joinLinks(layers.selectedLinks, selected.links, 'selectedLink', getVisualRadiusOffset)
+        joinNodes(
+            layers.hoverNeighbors,
+            hoverOnlyNeighbors,
+            'hoverPreviewNeighbor',
+            graph,
+            HOVER_NEIGHBOR_RADIUS_OFFSET,
+        )
+        joinNodes(
+            layers.sharedNodes,
+            sharedNodes,
+            'sharedNodeHalo',
+            graph,
+            SHARED_NODE_RADIUS_OFFSET,
+        )
 
         layers.selectedNodes
             .selectAll('circle')
@@ -88,9 +122,9 @@ export default function useNetworkGraphSelection({
             hovered.targetNode ? [hovered.targetNode] : [],
             'hoveredNodeHalo',
             graph,
-            5,
+            HOVERED_NODE_RADIUS_OFFSET,
         )
 
-        updateGraphOverlayPositions(layers)
+        updateGraphOverlayPositions(layers, graph.sizeScale)
     }, [data, graphColors, graphMode, graphModelRef, graphSceneRef, hoveredNodeId, selectedArticle])
 }

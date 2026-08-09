@@ -125,9 +125,9 @@ export function getEtalSemanticColors(theme) {
         textMuted: theme.colors.petrolSpace[2],
         graph: {
             nodePalette: theme.colors.plasmaCore.slice(2),
-            nodeOutline: theme.colors.petrolSpace[1],
-            link: theme.colors.petrolSpace[2],
-            selectedLink: theme.colors.redNebula[4],
+            nodeOutline: theme.colors.petrolSpace[4],
+            link: theme.colors.petrolSpace[6],
+            selectedLink: theme.colors.redNebula[8],
             citedNode: theme.colors.milkyPurple[3],
             citerNode: theme.colors.milkyPurple[6],
             oracleFill: theme.colors.oracleGreen[5],
