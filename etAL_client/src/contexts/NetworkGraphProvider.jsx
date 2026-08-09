@@ -1,4 +1,4 @@
-import {useCallback, useMemo, useState} from 'react'
+import {useCallback, useMemo, useRef, useState} from 'react'
 import {NetworkGraphContext} from '../hooks/useNetworkGraphContext'
 import {
   estimateEtAlFetchTimeMS,
@@ -19,6 +19,8 @@ const initialState = {
 
 function NetworkGraphProvider({children}) {
   const [state, setStateInternal] = useState({...initialState})
+  const graphViewportRef = useRef(null)
+  const [isViewportReady, setIsViewportReady] = useState(false)
 
   const updateState = useCallback(function updateState(newState) {
     setStateInternal((prev) => {
@@ -64,10 +66,45 @@ function NetworkGraphProvider({children}) {
     }
   }, [updateState])
 
+  const registerGraphViewport = useCallback(function registerGraphViewport(controller) {
+    graphViewportRef.current = controller
+    setIsViewportReady(true)
+
+    return () => {
+      if (graphViewportRef.current !== controller) return
+      graphViewportRef.current = null
+      setIsViewportReady(false)
+    }
+  }, [])
+
+  const zoomIn = useCallback(() => graphViewportRef.current?.zoomIn(), [])
+  const zoomOut = useCallback(() => graphViewportRef.current?.zoomOut(), [])
+  const resetView = useCallback(() => graphViewportRef.current?.resetView(), [])
+
   //-------------Context Interface-----------------
   const value = useMemo(
-    () => ({...state, loadData, setArticle, setGraphMode}),
-    [loadData, setArticle, setGraphMode, state],
+    () => ({
+      ...state,
+      isViewportReady,
+      loadData,
+      setArticle,
+      setGraphMode,
+      registerGraphViewport,
+      zoomIn,
+      zoomOut,
+      resetView,
+    }),
+    [
+      isViewportReady,
+      loadData,
+      registerGraphViewport,
+      resetView,
+      setArticle,
+      setGraphMode,
+      state,
+      zoomIn,
+      zoomOut,
+    ],
   )
 
   return (

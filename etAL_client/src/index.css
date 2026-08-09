@@ -25,6 +25,10 @@ input {
     --etal-action-bar-left: var(--mantine-spacing-sm);
     --etal-action-bar-width: 72px;
     --etal-action-bar-gap: var(--mantine-spacing-sm);
+    --etal-action-bar-top: max(
+        var(--etal-workspace-top),
+        calc(50dvh - clamp(180px, 32.5dvh, 300px))
+    );
     position: relative;
     height: 100dvh;
     overflow: hidden;
@@ -32,7 +36,7 @@ input {
 
 .actionBar {
     position: fixed;
-    top: 50%;
+    top: var(--etal-action-bar-top);
     left: var(--etal-action-bar-left);
     z-index: 5;
     box-sizing: border-box;
@@ -41,7 +45,6 @@ input {
     max-height: calc(100dvh - var(--etal-workspace-top) - var(--etal-workspace-top));
     overflow-y: auto;
     background: color-mix(in srgb, var(--etal-color-surface) 88%, transparent);
-    transform: translateY(-50%);
     backdrop-filter: blur(12px);
 }
 
@@ -169,7 +172,7 @@ input {
     transition: transform 220ms ease;
 }
 
-.graphZoomControls {
+.footerBar {
     position: absolute;
     bottom: 1rem;
     left: 50%;
@@ -248,6 +251,55 @@ input {
     stroke: var(--etal-graph-link);
     stroke-width: 1.5px;
     stroke-opacity: 0.2;
+}
+
+.graphHighlightLayer {
+    pointer-events: none;
+}
+
+.graphOverlay {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.graphOverlay.isVisible {
+    opacity: 1;
+}
+
+.hoverPreviewLink {
+    stroke: var(--etal-graph-hover-preview);
+    stroke-width: 2.5px;
+    stroke-opacity: 0.9;
+    stroke-dasharray: 6 4;
+}
+
+.sharedLinkUnderlay {
+    stroke: var(--etal-graph-hover-preview);
+    stroke-width: 8px;
+    stroke-opacity: 0.28;
+}
+
+.hoverPreviewNeighbor {
+    fill: none;
+    stroke: var(--etal-graph-hover-preview);
+    stroke-width: 3px;
+    stroke-opacity: 0.85;
+    stroke-dasharray: 4 3;
+}
+
+.sharedNodeHalo {
+    fill: none;
+    stroke: var(--etal-graph-hover-preview);
+    stroke-width: 6px;
+    stroke-opacity: 0.38;
+}
+
+.hoveredNodeHalo {
+    fill: color-mix(in srgb, var(--etal-graph-hover-preview) 16%, transparent);
+    stroke: var(--etal-graph-hover-preview);
+    stroke-width: 5px;
+    stroke-opacity: 1;
+    filter: drop-shadow(0 0 6px color-mix(in srgb, var(--etal-graph-hover-preview) 75%, transparent));
 }
 
 .citedNode {

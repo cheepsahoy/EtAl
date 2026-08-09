@@ -1,5 +1,6 @@
 import Navbar from "./components/searchFunctions/Navbar";
 import ActionBar from "./components/action_bar/ActionBar";
+import FooterBar from "./components/footer/FooterBar";
 import NetworkGraph from "./components/citation_visualization/NetworkGraph";
 import NetworkLoadingOverlay from "./components/citation_visualization/NetworkLoadingOverlay";
 import NetworkMenus from "./components/citation_visualization/NetworkMenus";
@@ -23,6 +24,7 @@ function AppContent() {
           <WelcomeScreen />
         )}
       </main>
+      {hasGraph && <FooterBar />}
       {hasGraph && <NetworkMenus />}
       {hasGraph && <ActionBar />}
       {hasGraph && <SelectedArticleViewBox />}

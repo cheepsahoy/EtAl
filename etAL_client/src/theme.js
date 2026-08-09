@@ -132,6 +132,7 @@ export function getEtalSemanticColors(theme) {
             citerNode: theme.colors.milkyPurple[6],
             oracleFill: theme.colors.oracleGreen[5],
             oracleStroke: theme.colors.oracleGreen[8],
+            hoverPreview: theme.colors.amberPulse[4],
         },
     }
 }
@@ -156,6 +157,7 @@ export function etalCssVariablesResolver(theme) {
             '--etal-graph-node-citer': colors.graph.citerNode,
             '--etal-graph-node-oracle': colors.graph.oracleFill,
             '--etal-graph-node-oracle-stroke': colors.graph.oracleStroke,
+            '--etal-graph-hover-preview': colors.graph.hoverPreview,
         },
     }
 }

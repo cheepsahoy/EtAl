@@ -77,7 +77,7 @@ function SelectedArticleViewBox() {
             className="selectedArticleViewBox"
             withinPortal={false}
             position={{
-                top: 'var(--etal-workspace-top)',
+                top: 'var(--etal-action-bar-top)',
                 left: 'calc(var(--etal-action-bar-left) + var(--etal-action-bar-width) + var(--etal-action-bar-gap))',
             }}
             zIndex={4}>
