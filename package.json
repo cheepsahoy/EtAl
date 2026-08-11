@@ -10,13 +10,13 @@
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/cheepsahoy/etAL.git"
+        "url": "git+https://github.com/cheepsahoy/EtAl.git"
     },
     "keywords": [],
     "author": "",
     "license": "ISC",
     "bugs": {
-        "url": "https://github.com/cheepsahoy/etAL/issues"
+        "url": "https://github.com/cheepsahoy/EtAl/issues"
     },
-    "homepage": "https://github.com/cheepsahoy/etAL#readme"
+    "homepage": "https://cheepsahoy.github.io/EtAl/"
 }

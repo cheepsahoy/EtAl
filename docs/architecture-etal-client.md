@@ -171,7 +171,7 @@ Mantine supplies UI primitives. Prefer theme props and focused CSS hooks over a 
 
 ## Build and deployment
 
-Use Node 22 and the commands in root `AGENTS.md`. Vite's `base` is `/etAL/`, matching a GitHub project site.
+Use Node 22 and the commands in root `AGENTS.md`. Vite's `base` is `/EtAl/`, matching the case-sensitive GitHub Pages project path.
 
 The Pages workflow on pushes to `main` or manual dispatch:
 
