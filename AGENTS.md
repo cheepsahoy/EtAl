@@ -4,7 +4,7 @@
 
 EtAL is a scholarly-conversation visualizer. A user selects an OpenAlex work, EtAL fetches the works that cite it, and the browser builds an interactive citation network. The graph supports incoming **Citations** relationships and outgoing **Oracles** relationships for a selected work.
 
-The application is currently browser-only. `etal_client` imports `oa_middleware` directly, calls OpenAlex from the browser, and constructs graph data in memory. There is no backen.
+The application is currently browser-only. `etal_client` imports `oa_middleware` directly, calls OpenAlex from the browser, and constructs graph data in memory. There is no backend.
 
 More information can be found in the subsystem references.
 
@@ -84,18 +84,9 @@ The payload contains `centralCitationID`, keyed conversation/outgoing objects, a
 For normal client changes run:
 
 ```bash
-npm run lint --prefix etAL_client
-npm run build --prefix etAL_client
+npm run lint --prefix etal_client
+npm run build --prefix etal_client
 git diff --check
 ```
 
 Also exercise affected states manually when tests do not exist: initial search, graph loading, node hover, node selection, citation/oracle switching, shared hover plus selection, zoom/reset, and drawer resizing as relevant.
-
-## Planned, not implemented
-
-- Handling for rate limiting
-- IndexedDB caching / user history
-- shareable OpenAlex-ID routes
-- shared outgoing-reference visualization + mode
-- citation management / export (w/ Zotero-like integration)
-- help page

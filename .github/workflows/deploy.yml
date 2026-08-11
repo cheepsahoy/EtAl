@@ -1,4 +1,4 @@
-name: Deploy etAL to GitHub Pages
+name: Deploy EtAl to GitHub Pages
 
 on:
     push:
